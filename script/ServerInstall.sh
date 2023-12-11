@@ -37,3 +37,10 @@ chmod +x ./ServerStart.sh
 echo "Moving stop script..."
 mv ./TronStadium/script/ServerStop.sh ./
 chmod +x ./ServerStop.sh
+
+#
+# API Setup
+#
+
+mkdir ./www
+mv ./TronStadium/server/api/* ./www
