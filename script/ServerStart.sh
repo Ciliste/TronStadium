@@ -23,3 +23,4 @@ else
 fi
 
 docker compose -f ./database/stack.yml up -d
+docker exec -i tron-stadium-db psql -U postgres -d postgres < ./database/init.sql
