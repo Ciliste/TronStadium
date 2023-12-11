@@ -1,0 +1,16 @@
+
+# Compiled source #
+*.class
+
+# IDEA files
+.idea
+*.iml
+*.ipr
+*.iws
+*.bak
+*.DS_Store
+*.orig
+
+# VS Code files
+.vscode
+
