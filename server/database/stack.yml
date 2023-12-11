@@ -1,18 +1,18 @@
 services:
-	db:
-		container_name: tron-stadium-db
-		image: postgres:16.1
-		volumes:
-			- datadir:/var/lib/postgresql/data
-		env_file:
-			- ./.env
-		networks:
-			- network
-		ports:
-			- 5432:5432
+  db:
+    container_name: tron-stadium-db
+    image: postgres:16.1
+    volumes:
+      - datadir:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - network
+    ports:
+      - 5432:5432
 
 networks:
-	network:
+  network:
 
 volumes:
-	datadir:
+  datadir:
