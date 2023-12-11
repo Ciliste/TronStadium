@@ -6,6 +6,14 @@ else
 	exit 1
 fi
 
+if command -v docker-compose &> /dev/null; then
+	echo "Docker Compose is installed."
+else
+	echo "/!\ Docker Compose is not installed!"
+	echo "Please install Docker Compose before running this script."
+	exit 1
+fi
+
 if groups | grep -q '\bdocker\b'; then
     echo "The user is in the Docker group."
 else
