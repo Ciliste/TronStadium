@@ -42,5 +42,13 @@ chmod +x ./ServerStop.sh
 # API Setup
 #
 
+# If www directory exists, then delete it
+if [ -d "./www" ]; then
+	echo "www directory exists, deleting it..."
+	rm -fR ./www
+fi
+
+# Move API files
+echo "Moving API files..."
 mkdir ./www
 mv ./TronStadium/server/api/* ./www
