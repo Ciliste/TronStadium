@@ -14,3 +14,10 @@ else
 	exit 1
 fi
 
+if docker inspect -f '{{.State.Running}}' tron-stadium-db &> /dev/null; then
+	echo "/!\ The database container is running!"
+	echo "Please stop the database container before running this script."
+	exit 1
+else
+	echo "The database container is not running."
+fi
