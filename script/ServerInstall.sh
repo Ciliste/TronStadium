@@ -54,3 +54,6 @@ mkdir ./www
 mv ./TronStadium/server/api/* ./www
 mv ./www/DB.inc.php ./DB.inc.php
 mv ./www/API_Utils.inc.php ./API_Utils.inc.php
+
+echo "Removing TronStadium directory..."
+rm -fR ./TronStadium
