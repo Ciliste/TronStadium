@@ -21,3 +21,5 @@ if docker inspect -f '{{.State.Running}}' tron-stadium-db &> /dev/null; then
 else
 	echo "The database container is not running."
 fi
+
+docker-compose -f stack.yml up -d
