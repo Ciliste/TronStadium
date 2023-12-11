@@ -21,5 +21,5 @@ mv ./TronStadium/server/database ./
 if command -v docker &> /dev/null; then
     echo "Docker is installed."
 else
-    echo "Docker is not installed."
+    echo "Docker is not installed." >&2
 fi
