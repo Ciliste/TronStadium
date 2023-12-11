@@ -32,7 +32,7 @@ fi
 # Move scripts
 echo "Moving start script..."
 mv ./TronStadium/script/ServerStart.sh ./
-chmod +x ./ServerStart.
+chmod +x ./ServerStart.sh
 
 echo "Moving stop script..."
 mv ./TronStadium/script/ServerStop.sh ./
