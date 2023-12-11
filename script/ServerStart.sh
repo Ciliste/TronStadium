@@ -5,3 +5,12 @@ else
 	echo "Please install Docker before running this script."
 	exit 1
 fi
+
+if groups | grep -q '\bdocker\b'; then
+    echo "The user is in the Docker group."
+else
+    echo "/!\ The user is not in the Docker group!"
+	echo "Please add the user to the Docker group before running this script."
+	exit 1
+fi
+
