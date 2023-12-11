@@ -22,5 +22,11 @@ else
 	echo "The database container is not running."
 fi
 
+echo "Starting the database..."
 docker compose -f ./database/stack.yml up -d
+
+echo "Waiting for the database to start..."
+sleep 5
+
+echo "Initializing the database..."
 docker exec -i tron-stadium-db psql -U postgres -d postgres < ./database/init.sql
