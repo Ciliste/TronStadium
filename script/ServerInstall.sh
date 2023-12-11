@@ -1,6 +1,6 @@
 # If TronStadium directory exists, then delete it
 if [ -d "./TronStadium" ]; then
-	echo "TronStadium directory exists, deleting it..."
+	echo "TronStadium directory exists, deleting it..." >&2
 	rm -fR ./TronStadium
 fi
 
@@ -10,7 +10,7 @@ git clone https://github.com/Ciliste/TronStadium.git
 
 # If database directory exists, then delete it
 if [ -d "./database" ]; then
-	echo "Database directory exists, deleting it..."
+	echo "Database directory exists, deleting it..." >&2
 	rm -fR ./database
 fi
 
