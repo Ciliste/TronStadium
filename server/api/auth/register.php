@@ -5,9 +5,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../../DB.inc.php';
+include_once '../../DB.inc.php';
 
-require_once '../../API_Utils.inc.php';
+include_once '../../API_Utils.inc.php';
 
 $username = $_POST['username'];
 $password = $_POST['password'];

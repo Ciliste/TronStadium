@@ -1,6 +1,6 @@
 <?php
 
-require_once './DB.inc.php';
+include_once './DB.inc.php';
 
 function getBcryptOptions() {
 
