@@ -24,7 +24,16 @@ if [ -f "./ServerStart.sh" ]; then
 	rm -f ./ServerStart.sh
 fi
 
+if [ -f "./ServerStop.sh" ]; then
+	echo "ServerStop.sh file exists, deleting it..."
+	rm -f ./ServerStop.sh
+fi
+
 # Move scripts
 echo "Moving start script..."
 mv ./TronStadium/script/ServerStart.sh ./
-chmod +x ./ServerStart.sh
+chmod +x ./ServerStart.
+
+echo "Moving stop script..."
+mv ./TronStadium/script/ServerStop.sh ./
+chmod +x ./ServerStop.sh
