@@ -14,5 +14,12 @@ if [ -d "./database" ]; then
 	rm -fR ./database
 fi
 
+# Move database directory
 echo "Moving database directory..."
 mv ./TronStadium/server/database ./
+
+if command -v docker &> /dev/null; then
+    echo "Docker is installed."
+else
+    echo "Docker is not installed."
+fi
