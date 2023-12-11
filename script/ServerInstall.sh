@@ -21,3 +21,4 @@ mv ./TronStadium/server/database ./
 # Move scripts
 echo "Moving start script..."
 mv ./TronStadium/script/ServerStart.sh ./
+chmod +x ./ServerStart.sh
