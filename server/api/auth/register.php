@@ -9,16 +9,24 @@ require_once '../../DB.inc.php';
 
 require_once '../../API_Utils.inc.php';
 
-$username = $_POST['username'];
-$password = $_POST['password'];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
-if (empty($username) || empty($password)) {
+	http_response_code(405);
+	die(json_encode([
+		'error' => 'Only POST requests are allowed.',
+	]));
+}
+
+if (!isset($_POST['username']) || !isset($_POST['password'])) {
 
 	http_response_code(400);
 	die(json_encode([
 		'error' => 'Username and password are required.',
 	]));
 }
+
+$username = $_POST['username'];
+$password = $_POST['password'];
 
 function username_exists($username) {
 
