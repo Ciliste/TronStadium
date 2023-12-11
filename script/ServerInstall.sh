@@ -1,6 +1,6 @@
 # If TronStadium directory exists, then delete it
 if [ -d "./TronStadium" ]; then
-	echo "TronStadium directory exists, deleting it..." >&2
+	echo "TronStadium directory exists, deleting it..."
 	rm -fR ./TronStadium
 fi
 
@@ -10,7 +10,7 @@ git clone https://github.com/Ciliste/TronStadium.git
 
 # If database directory exists, then delete it
 if [ -d "./database" ]; then
-	echo "Database directory exists, deleting it..." >&2
+	echo "Database directory exists, deleting it..."
 	rm -fR ./database
 fi
 
@@ -18,8 +18,6 @@ fi
 echo "Moving database directory..."
 mv ./TronStadium/server/database ./
 
-if command -v docker &> /dev/null; then
-    echo "Docker is installed."
-else
-    echo "Docker is not installed." >&2
-fi
+# Move scripts
+echo "Moving start script..."
+mv ./TronStadium/script/ServerStart.sh ./
