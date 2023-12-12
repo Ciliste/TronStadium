@@ -75,6 +75,7 @@ else {
 	http_response_code(200);
 
 	$token = generateToken();
+	echo 'registerToken($user_id, $token); ' . $user_id . ' ' . $token;
 	registerToken($user_id, $token);
 
 	echo json_encode([
