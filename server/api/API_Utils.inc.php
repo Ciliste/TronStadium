@@ -28,14 +28,10 @@ function registerToken($user_id, $token) {
 
 	global $PDO;
 
-	$stmt = $PDO->prepare('UPDATE users SET token = ?, token_expires = NOW() + INTERVAL \'1 day\' WHERE id = ?');
+	// TODO: Resoudre le problème du prepared statement qui ne fonctionne pas avec le token
+	$stmt = $PDO->prepare('UPDATE users SET token = \'' . $token . '\', token_expires = NOW() + INTERVAL \'1 day\' WHERE id = ?');
 
-	$stmt->bindParam(1, $token, PDO::PARAM_STR);
-	$stmt->bindParam(2, $user_id, PDO::PARAM_INT);
-
-	echo $stmt->queryString . "\n";
-	// With params
-	echo $stmt->debugDumpParams() . "\n";
+	$stmt->bindParam(1, $user_id, PDO::PARAM_INT);
 
 	$stmt->execute();
 }
