@@ -28,8 +28,6 @@ function registerToken($user_id, $token) {
 
 	global $PDO;
 
-	$stmt = $PDO->prepare('UPDATE users SET token = ?, token_expires = NOW() + INTERVAL \'1 day\' WHERE id = ?');
+	$stmt = $PDO->prepare('UPDATE users SET token = \'?\', token_expires = NOW() + INTERVAL \'1 day\' WHERE id = ?');
 	$stmt->execute([$token, $user_id]);
-
-	echo $stmt->rowCount();
 }
