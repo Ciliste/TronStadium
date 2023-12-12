@@ -33,5 +33,7 @@ function registerToken($user_id, $token) {
 	$stmt->bindParam(1, $token, PDO::PARAM_STR);
 	$stmt->bindParam(2, $user_id, PDO::PARAM_INT);
 
+	echo $stmt->queryString . "\n";
+
 	$stmt->execute();
 }
