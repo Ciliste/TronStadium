@@ -19,18 +19,24 @@ function verifyPassword($password, $hash) {
 	return password_verify($password, $hash);
 }
 
-function generateToken() {
+function generateToken($length = 20) {
 
-	return bin2hex(random_bytes(20));
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$characters_length = strlen($characters);
+	$token = '';
+
+	for ($i = 0; $i < $length; $i++) {
+
+		$token .= $characters[rand(0, $characters_length - 1)];
+	}
+
+	return $token;
 }
 
 function registerToken($user_id, $token) {
 
 	global $PDO;
 
-	// TODO: Resoudre le problème du prepared statement qui ne fonctionne pas avec le token
-	$sql = "UPDATE users SET token = '$token', token_expires = NOW() + INTERVAL '1 day' WHERE id = $user_id;";
-	$PDO->query($sql);
-
-	echo $sql;
+	$stmt = $PDO->prepare('UPDATE users SET token = ?, token_expires = NOW() + INTERVAL \'1 day\' WHERE id = ?');
+	$stmt->execute([$token, $user_id]);
 }
