@@ -26,8 +26,8 @@ function generateToken() {
 
 function registerToken($user_id, $token) {
 
-	global $DB;
+	global $PDO;
 
-	$stmt = $DB->prepare('INSERT INTO users (token, token_expires) VALUES (?, NOW() + INTERVAL \'1 DAY\') WHERE id = ?');
+	$stmt = $PDO->prepare('INSERT INTO users (token, token_expires) VALUES (?, NOW() + INTERVAL \'1 DAY\') WHERE id = ?');
 	$stmt->execute([$token, $user_id]);
 }

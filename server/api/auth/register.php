@@ -30,6 +30,8 @@ $password = $_POST['password'];
 
 function username_exists($username) {
 
+	global $PDO;
+
 	$stmt = $PDO->prepare('SELECT COUNT(*) FROM users WHERE username = ?');
 	$stmt->execute([$username]);
 
@@ -47,6 +49,8 @@ if (username_exists($username)) {
 }
 
 function create_user($username, $password) {
+
+	global $PDO;
 
 	$stmt = $PDO->prepare('INSERT INTO users (username, password_hash) VALUES (?, ?)');
 	$stmt->execute([$username, bcrypt($password)]);
