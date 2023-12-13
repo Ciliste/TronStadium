@@ -4,15 +4,15 @@ require_once '../../DB.inc.php';
 
 require_once '../../API_Utils.inc.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 	http_response_code(405);
 	die(json_encode([
-		'error' => 'Only POST requests are allowed.',
+		'error' => 'Only GET requests are allowed.',
 	]));
 }
 
-if (!isset($_POST['username']) || !isset($_POST['password'])) {
+if (!isset($_GET['username']) || !isset($_GET['password'])) {
 
 	http_response_code(400);
 	die(json_encode([
@@ -20,8 +20,8 @@ if (!isset($_POST['username']) || !isset($_POST['password'])) {
 	]));
 }
 
-$username = $_POST['username'];
-$password = $_POST['password'];
+$username = $_GET['username'];
+$password = $_GET['password'];
 
 $stmt = $PDO->prepare('SELECT password_hash FROM users WHERE username = ?');
 $stmt->execute([$username]);
