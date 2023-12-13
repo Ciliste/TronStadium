@@ -46,7 +46,12 @@ if (!verifyPassword($password, $password_hash)) {
 
 $token = generateToken();
 
-registerToken($username, $token);
+$stmt = $PDO->prepare('SELECT id FROM users WHERE username = ?');
+$stmt->execute([$username]);
+
+$user_id = $stmt->fetchColumn();
+
+registerToken($user_id, $token);
 
 echo json_encode([
 	'token' => $token,
