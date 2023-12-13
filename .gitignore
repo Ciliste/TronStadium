@@ -1,6 +1,7 @@
 
 # Compiled source #
 *.class
+*.jar
 
 # IDEA files
 .idea
@@ -14,5 +15,6 @@
 # VS Code files
 .vscode
 
-.gradle
+.gradle/
+gradle/
 build/
