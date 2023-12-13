@@ -1,23 +1,20 @@
 package shesh.tron.screen;
 
-public class FirstScreen extends AbstractScreen {
+import com.badlogic.gdx.ScreenAdapter;
+
+public class FirstScreen extends ScreenAdapter {
+
+    private Navigation navigation;
 
     public FirstScreen(Navigation navigation) {
 
-        super(navigation);
+        this.navigation = navigation;
     }
 
     @Override
     public void render(float delta) {
 
         super.render(delta);
-
         navigation.showRegisterScreen();
-    }
-
-    @Override
-    public void dispose() {
-
-        super.dispose();
     }
 }

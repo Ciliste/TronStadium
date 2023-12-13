@@ -17,6 +17,16 @@ public class MenuScreen extends AbstractScreen {
     }
 
     @Override
+    protected void initUI() {
+
+    }
+
+    @Override
+    protected void initUIListeners() {
+
+    }
+
+    @Override
     public void render(float delta) {
 
         super.render(delta);

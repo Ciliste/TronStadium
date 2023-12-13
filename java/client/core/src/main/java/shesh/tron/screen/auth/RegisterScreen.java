@@ -1,4 +1,4 @@
-package shesh.tron.screen;
+package shesh.tron.screen.auth;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -8,11 +8,11 @@ import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
+import shesh.tron.screen.AbstractScreen;
+import shesh.tron.screen.Navigation;
 import shesh.tron.utils.APIUtils;
 
 public class RegisterScreen extends AbstractScreen {
-
-    private Stage stage;
 
     private VisTextField usernameField;
     private VisTextField passwordField;
@@ -25,16 +25,9 @@ public class RegisterScreen extends AbstractScreen {
     public RegisterScreen(Navigation navigation) {
 
         super(navigation);
-
-        initUI();
-        initUIListeners();
-        setPositions();
-        setInputProcessor();
     }
 
-    private void initUI() {
-
-        stage = new Stage();
+    protected void initUI() {
 
         VisTable table = new VisTable();
         table.setFillParent(true);
@@ -70,12 +63,13 @@ public class RegisterScreen extends AbstractScreen {
         table.row();
         table.add(backButton).width(300).pad(10);
 
-        stage.addActor(table);
+        uiStage.addActor(table);
     }
 
-    private void initUIListeners() {
+    protected void initUIListeners() {
 
         initRegisterButtonListener();
+        initLoginButtonListener();
     }
 
     private void initRegisterButtonListener() {
@@ -91,11 +85,11 @@ public class RegisterScreen extends AbstractScreen {
 
                 if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
 
-                    Dialogs.showErrorDialog(stage, "Please fill all the fields.");
+                    Dialogs.showErrorDialog(uiStage, "Please fill all the fields.");
                 }
                 else if (!password.equals(confirmPassword)) {
 
-                    Dialogs.showErrorDialog(stage, "Passwords do not match.");
+                    Dialogs.showErrorDialog(uiStage, "Passwords do not match.");
                 }
                 else {
 
@@ -105,43 +99,22 @@ public class RegisterScreen extends AbstractScreen {
                     }
                     catch (Exception e) {
 
-                        e.printStackTrace();
+                        Dialogs.showErrorDialog(uiStage, e.getMessage());
                     }
                 }
             }
         });
     }
 
-    private void setInputProcessor() {
+    private void initLoginButtonListener() {
 
-        Gdx.input.setInputProcessor(stage);
-    }
+        loginButton.addListener(new ChangeListener() {
 
-    private void setPositions() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
 
-
-    }
-
-    @Override
-    public void render(float delta) {
-
-        super.render(delta);
-
-        stage.act(delta);
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-        super.resize(width, height);
-
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void dispose() {
-
-        super.dispose();
+                navigation.showLoginScreen();
+            }
+        });
     }
 }

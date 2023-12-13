@@ -1,6 +1,5 @@
 package shesh.tron;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,7 +10,8 @@ import com.kotcrab.vis.ui.VisUI;
 import shesh.tron.screen.FirstScreen;
 import shesh.tron.screen.MenuScreen;
 import shesh.tron.screen.Navigation;
-import shesh.tron.screen.RegisterScreen;
+import shesh.tron.screen.auth.LoginScreen;
+import shesh.tron.screen.auth.RegisterScreen;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game implements Navigation {
@@ -54,6 +54,14 @@ public class Main extends Game implements Navigation {
 
         screen.dispose();
         screen = new RegisterScreen(this);
+        setScreen(screen);
+    }
+
+    @Override
+    public void showLoginScreen() {
+
+        screen.dispose();
+        screen = new LoginScreen(this);
         setScreen(screen);
     }
 }
