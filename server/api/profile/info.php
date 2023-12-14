@@ -3,6 +3,11 @@
 require_once '../../DB.inc.php';
 require_once '../../API_Utils.inc.php';
 
+# Show errors
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 	http_response_code(405);
