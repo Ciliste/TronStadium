@@ -45,5 +45,11 @@ else {
 
 	$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-	echo json_encode($user);
+	$data = [
+		'id' => $user['id'],
+		'username' => $user['username'],
+		'created_at' => $user['created_at'],
+	];
+
+	echo json_encode($data);
 }
