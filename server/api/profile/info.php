@@ -1,7 +1,7 @@
 <?php
 
-require_once '../../DB.inc.php';
-require_once '../../API_Utils.inc.php';
+require_once '../../../DB.inc.php';
+require_once '../../../API_Utils.inc.php';
 
 # Show errors
 ini_set('display_errors', 1);

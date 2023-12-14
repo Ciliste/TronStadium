@@ -5,9 +5,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../../DB.inc.php';
+require_once '../../../DB.inc.php';
 
-require_once '../../API_Utils.inc.php';
+require_once '../../../API_Utils.inc.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 

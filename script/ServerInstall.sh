@@ -51,9 +51,10 @@ fi
 # Move API files
 echo "Moving API files..."
 mkdir ./www
-mv ./TronStadium/server/api/* ./www
-mv ./www/DB.inc.php ./DB.inc.php
-mv ./www/API_Utils.inc.php ./API_Utils.inc.php
+mkdir ./www/api
+mv ./TronStadium/server/api/* ./www/api
+mv ./www/api/DB.inc.php ./DB.inc.php
+mv ./www/api/API_Utils.inc.php ./API_Utils.inc.php
 
 echo "Removing TronStadium directory..."
 rm -fR ./TronStadium
