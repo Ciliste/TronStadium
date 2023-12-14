@@ -35,4 +35,9 @@ public final class AccountUtils {
 
         return getTokenFile().exists();
     }
+
+    public static void deleteToken() {
+
+        getTokenFile().delete();
+    }
 }

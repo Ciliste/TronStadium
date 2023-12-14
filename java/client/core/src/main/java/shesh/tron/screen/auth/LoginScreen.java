@@ -2,6 +2,8 @@ package shesh.tron.screen.auth;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -78,16 +80,27 @@ public class LoginScreen extends AbstractScreen {
                 String username = usernameField.getText();
                 String password = passwordField.getText();
 
-                try {
+                APIUtils.login(username, password).then(response -> {
 
-                    String token = APIUtils.login(username, password);
-                    navigation.showMenuScreen(token);
-                }
-                catch (Exception e) {
+                    try {
 
-                    Dialogs.showErrorDialog(uiStage, e.getMessage());
-                    e.printStackTrace();
-                }
+                        ObjectMapper mapper = new ObjectMapper();
+                        JsonNode jsonNode = mapper.readTree(response.getRawResponse());
+
+                        String token = jsonNode.get("token").asText();
+
+                        navigation.showMenuScreen(token);
+                    }
+                    catch (Exception e) {
+
+                        handleException(e);
+                    }
+
+                }).catchError(error -> {
+
+                    handleException(error);
+
+                }).executeAsync();
             }
         });
     }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.kotcrab.vis.ui.VisUI;
 import shesh.tron.screen.FirstScreen;
-import shesh.tron.screen.MenuScreen;
+import shesh.tron.screen.main.MenuScreen;
 import shesh.tron.screen.Navigation;
 import shesh.tron.screen.auth.LoginScreen;
 import shesh.tron.screen.auth.RegisterScreen;
@@ -53,17 +53,21 @@ public class Main extends Game implements Navigation {
     @Override
     public void showRegisterScreen() {
 
-        screen.dispose();
-        screen = new RegisterScreen(this);
-        setScreen(screen);
+        Gdx.app.postRunnable(() -> {
+            screen.dispose();
+            screen = new RegisterScreen(this);
+            setScreen(screen);
+        });
     }
 
     @Override
     public void showLoginScreen() {
 
-        screen.dispose();
-        screen = new LoginScreen(this);
-        setScreen(screen);
+        Gdx.app.postRunnable(() -> {
+            screen.dispose();
+            screen = new LoginScreen(this);
+            setScreen(screen);
+        });
     }
 
     @Override
@@ -71,8 +75,10 @@ public class Main extends Game implements Navigation {
 
         AccountUtils.setToken(token);
 
-        screen.dispose();
-        screen = new MenuScreen(this, token);
-        setScreen(screen);
+        Gdx.app.postRunnable(() -> {
+            screen.dispose();
+            screen = new MenuScreen(this, token);
+            setScreen(screen);
+        });
     }
 }

@@ -2,6 +2,8 @@ package shesh.tron.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import shesh.tron.worker.request.GETRequest;
+import shesh.tron.worker.request.POSTRequest;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -13,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 
 public final class APIUtils {
 
-    private static final String API_URL = "http://tronstadium.ciliste.games";
+    private static final String API_URL = "http://tronstadium.ciliste.games/api";
 
     private static final String AUTH_URL = API_URL + "/auth";
 
@@ -21,82 +23,36 @@ public final class APIUtils {
     private static final String LOGIN_URL = AUTH_URL + "/login.php";
     private static final String VALIDATE_TOKEN_URL = AUTH_URL + "/isValidToken.php";
 
+    private static final String PROFILE_URL = API_URL + "/profile";
+
+    private static final String INFO_PROFILE_URL = PROFILE_URL + "/info.php";
+
+    private static final String INFO_API_URL = API_URL + "/info";
+
+    private static final String SERVER_INFO_URL = INFO_API_URL + "/server.php";
+
     private APIUtils() {
 
     }
 
-    public static String register(String username, String password) throws Exception {
+    public static POSTRequest register(String username, String password) {
 
-        String postData = "username=" + username + "&password=" + password;
-
-        URL url = new URL(REGISTER_URL);
-        // Open a connection to the URL
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        // Set the request method to POST
-        connection.setRequestMethod("POST");
-
-        // Enable input/output streams
-        connection.setDoOutput(true);
-
-        // Write data to the output stream
-        try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
-
-            byte[] postDataBytes = postData.getBytes(StandardCharsets.UTF_8);
-            wr.write(postDataBytes);
-        }
-
-        // Read the response from the server
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-
-            StringBuilder response = new StringBuilder();
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-
-                response.append(line);
-            }
-
-            // Close the connection
-            connection.disconnect();
-
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(response.toString());
-
-            return jsonNode.get("token").asText();
-        }
+        return new POSTRequest(REGISTER_URL, "username=" + username + "&password=" + password);
     }
 
-    public static String login(String username, String password) throws Exception {
+    public static GETRequest login(String username, String password) {
 
-        URL url = new URL(LOGIN_URL + "?username=" + username + "&password=" + password);
-        // Open a connection to the URL
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        return new GETRequest(LOGIN_URL + "?username=" + username + "&password=" + password);
+    }
 
-        // Enable input/output streams
-        connection.setDoOutput(true);
+    public static GETRequest getUserInfo(String token) {
 
-        // Read the response from the server
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+        return new GETRequest(INFO_PROFILE_URL + "?token=" + token);
+    }
 
-            StringBuilder response = new StringBuilder();
-            String line;
+    public static GETRequest getServerInfo() {
 
-            while ((line = reader.readLine()) != null) {
-
-                response.append(line);
-            }
-
-            // Close the connection
-            connection.disconnect();
-
-            System.out.println(response.toString());
-
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(response.toString());
-
-            return jsonNode.get("token").asText();
-        }
+        return new GETRequest(SERVER_INFO_URL);
     }
 
     public static boolean isValidToken(String token) throws Exception {
