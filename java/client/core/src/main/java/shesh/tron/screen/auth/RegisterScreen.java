@@ -95,7 +95,8 @@ public class RegisterScreen extends AbstractScreen {
 
                     try {
 
-                        System.out.println(APIUtils.register(username, password));
+                        String token = APIUtils.register(username, password);
+                        navigation.showMenuScreen(token);
                     }
                     catch (Exception e) {
 

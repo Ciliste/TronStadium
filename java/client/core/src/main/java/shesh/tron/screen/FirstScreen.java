@@ -1,6 +1,8 @@
 package shesh.tron.screen;
 
 import com.badlogic.gdx.ScreenAdapter;
+import shesh.tron.utils.APIUtils;
+import shesh.tron.utils.AccountUtils;
 
 public class FirstScreen extends ScreenAdapter {
 
@@ -15,6 +17,29 @@ public class FirstScreen extends ScreenAdapter {
     public void render(float delta) {
 
         super.render(delta);
-        navigation.showRegisterScreen();
+
+        String token = AccountUtils.getToken();
+        if (null != token) {
+
+            boolean isTokenValid = false;
+            try {
+
+                isTokenValid = APIUtils.isValidToken(token);
+            }
+            catch (Exception ignored) {}
+
+            if (isTokenValid) {
+
+                navigation.showMenuScreen(token);
+            }
+            else {
+
+                navigation.showLoginScreen();
+            }
+        }
+        else {
+
+            navigation.showLoginScreen();
+        }
     }
 }

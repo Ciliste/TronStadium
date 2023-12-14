@@ -18,6 +18,8 @@ public final class APIUtils {
     private static final String AUTH_URL = API_URL + "/auth";
 
     private static final String REGISTER_URL = AUTH_URL + "/register.php";
+    private static final String LOGIN_URL = AUTH_URL + "/login.php";
+    private static final String VALIDATE_TOKEN_URL = AUTH_URL + "/isValidToken.php";
 
     private APIUtils() {
 
@@ -62,6 +64,68 @@ public final class APIUtils {
             JsonNode jsonNode = mapper.readTree(response.toString());
 
             return jsonNode.get("token").asText();
+        }
+    }
+
+    public static String login(String username, String password) throws Exception {
+
+        URL url = new URL(LOGIN_URL + "?username=" + username + "&password=" + password);
+        // Open a connection to the URL
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // Enable input/output streams
+        connection.setDoOutput(true);
+
+        // Read the response from the server
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+
+                response.append(line);
+            }
+
+            // Close the connection
+            connection.disconnect();
+
+            System.out.println(response.toString());
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode jsonNode = mapper.readTree(response.toString());
+
+            return jsonNode.get("token").asText();
+        }
+    }
+
+    public static boolean isValidToken(String token) throws Exception {
+
+        URL url = new URL(VALIDATE_TOKEN_URL + "?token=" + token);
+        // Open a connection to the URL
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // Enable input/output streams
+        connection.setDoOutput(true);
+
+        // Read the response from the server
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+
+                response.append(line);
+            }
+
+            // Close the connection
+            connection.disconnect();
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode jsonNode = mapper.readTree(response.toString());
+
+            return jsonNode.get("valid").asBoolean();
         }
     }
 }

@@ -1,6 +1,7 @@
 package shesh.tron.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 
 public final class AccountUtils {
 
@@ -8,11 +9,16 @@ public final class AccountUtils {
 
     }
 
+    private static FileHandle getTokenFile() {
+
+        return Gdx.files.local("token.txt");
+    }
+
     public static String getToken() {
 
         if (tokenFileExists()) {
 
-            return Gdx.files.local("token.txt").readString();
+            return getTokenFile().readString();
         }
         else {
 
@@ -20,8 +26,13 @@ public final class AccountUtils {
         }
     }
 
+    public static void setToken(String token) {
+
+        getTokenFile().writeString(token, false);
+    }
+
     private static boolean tokenFileExists() {
 
-        return Gdx.files.local("token.txt").exists();
+        return getTokenFile().exists();
     }
 }

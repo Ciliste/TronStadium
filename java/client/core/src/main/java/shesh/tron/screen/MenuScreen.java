@@ -7,7 +7,7 @@ public class MenuScreen extends AbstractScreen {
 
     private SpriteBatch batch;
 
-    public MenuScreen(Navigation navigation) {
+    public MenuScreen(Navigation navigation, String token) {
 
         super(navigation);
 

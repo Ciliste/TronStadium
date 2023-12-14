@@ -12,6 +12,7 @@ import shesh.tron.screen.MenuScreen;
 import shesh.tron.screen.Navigation;
 import shesh.tron.screen.auth.LoginScreen;
 import shesh.tron.screen.auth.RegisterScreen;
+import shesh.tron.utils.AccountUtils;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game implements Navigation {
@@ -62,6 +63,16 @@ public class Main extends Game implements Navigation {
 
         screen.dispose();
         screen = new LoginScreen(this);
+        setScreen(screen);
+    }
+
+    @Override
+    public void showMenuScreen(String token) {
+
+        AccountUtils.setToken(token);
+
+        screen.dispose();
+        screen = new MenuScreen(this, token);
         setScreen(screen);
     }
 }

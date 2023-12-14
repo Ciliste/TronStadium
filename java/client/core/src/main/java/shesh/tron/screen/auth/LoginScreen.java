@@ -2,11 +2,13 @@ package shesh.tron.screen.auth;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import shesh.tron.screen.AbstractScreen;
 import shesh.tron.screen.Navigation;
+import shesh.tron.utils.APIUtils;
 
 public class LoginScreen extends AbstractScreen {
 
@@ -70,6 +72,23 @@ public class LoginScreen extends AbstractScreen {
 
         loginButton.addListener(new ClickListener() {
 
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                String username = usernameField.getText();
+                String password = passwordField.getText();
+
+                try {
+
+                    String token = APIUtils.login(username, password);
+                    navigation.showMenuScreen(token);
+                }
+                catch (Exception e) {
+
+                    Dialogs.showErrorDialog(uiStage, e.getMessage());
+                    e.printStackTrace();
+                }
+            }
         });
     }
 
