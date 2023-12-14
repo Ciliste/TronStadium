@@ -56,5 +56,18 @@ mv ./TronStadium/server/api/* ./www/api
 mv ./www/api/DB.inc.php ./DB.inc.php
 mv ./www/api/API_Utils.inc.php ./API_Utils.inc.php
 
+#If info directory exists, then delete it
+if [ -d "./info" ]; then
+	echo "Info directory exists, deleting it..."
+	rm -fR ./info
+fi
+
+# Create information files
+echo "Creating information files..."
+mkdir ./info
+echo "This directory contains information about the server." > ./info/README.txt
+echo "New Server" > ./info/NAME.txt
+echo "This is a new server." > ./info/DESCRIPTION.txt
+
 echo "Removing TronStadium directory..."
 rm -fR ./TronStadium
