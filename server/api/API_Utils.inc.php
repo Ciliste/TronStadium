@@ -40,3 +40,13 @@ function registerToken($user_id, $token) {
 	$stmt = $PDO->prepare('UPDATE users SET token = ?, token_expires = NOW() + INTERVAL \'1 day\' WHERE id = ?');
 	$stmt->execute([$token, $user_id]);
 }
+
+function isValidToken($token) {
+
+	global $PDO;
+
+	$stmt = $PDO->prepare('SELECT COUNT(*) FROM users WHERE token = ? AND token_expires > NOW()');
+	$stmt->execute([$token]);
+
+	return $stmt->fetchColumn() > 0;
+}

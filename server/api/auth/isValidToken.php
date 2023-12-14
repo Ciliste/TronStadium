@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../DB.inc.php';
+require_once '../../API_Utils.inc.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
@@ -20,20 +20,7 @@ if (!isset($_GET['token'])) {
 
 $token = $_GET['token'];
 
-$stmt = $PDO->prepare('SELECT COUNT(*) FROM users WHERE token = ? AND token_expires > NOW()');
-$stmt->execute([$token]);
-
-if ($stmt->fetchColumn() === 0) {
-
-	http_response_code(200);
-	echo json_encode([
-		'valid' => false,
-	]);
-}
-else {
-
-	http_response_code(200);
-	echo json_encode([
-		'valid' => true,
-	]);
-}
+http_response_code(200);
+echo json_encode([
+	'valid' => isValidToken($token),
+]);
