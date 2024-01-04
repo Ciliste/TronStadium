@@ -20,3 +20,6 @@ gradle/
 build/
 
 token.txt
+
+*.log
+TronStadiumAppData
