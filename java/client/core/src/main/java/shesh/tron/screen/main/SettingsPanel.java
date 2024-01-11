@@ -5,7 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
+import shesh.tron.screen.context.ApiEndpointContext;
 import shesh.tron.screen.panel.AbstractPanel;
+import shesh.tron.server.auth.token.Token;
 import shesh.tron.utils.APIUtils;
 
 public class SettingsPanel extends AbstractPanel {
@@ -15,19 +17,19 @@ public class SettingsPanel extends AbstractPanel {
 
     private MainMenuNavigation navigation;
 
-    public SettingsPanel(String token, MainMenuNavigation navigation) {
+    public SettingsPanel(String token, MainMenuNavigation navigation, ApiEndpointContext apiEndpointContext) {
 
         super();
 
         this.navigation = navigation;
 
-        APIUtils.getUserInfo(token).then(response -> {
+        apiEndpointContext.getApiEndpoint().getUser(Token.of(token)).then(user -> {
 
-            infoLabel.setText(response.getRawResponse());
+            infoLabel.setText("Welcome " + user.getUsername());
 
-        }).catchError(error -> {
+        }).error(error -> {
 
-            infoLabel.setText(error.getMessage());
+            infoLabel.setText("Error: " + error.getMessage());
 
         }).executeAsync();
     }

@@ -1,4 +1,4 @@
-package shesh.tron.screen;
+package shesh.tron.screen.navigation;
 
 public interface Navigation {
 

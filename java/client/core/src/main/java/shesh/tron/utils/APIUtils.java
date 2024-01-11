@@ -1,87 +1,188 @@
 package shesh.tron.utils;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import shesh.tron.worker.request.GETRequest;
-import shesh.tron.worker.request.POSTRequest;
+import shesh.tron.server.auth.AuthManager;
+import shesh.tron.server.auth.token.EncryptedToken;
+import shesh.tron.server.auth.token.Token;
+import shesh.tron.server.auth.user.User;
+import shesh.tron.server.crypto.cipher.AesCipher;
+import shesh.tron.server.crypto.key.SecretKey;
+import shesh.tron.utils.struct.Couple;
+import shesh.tron.worker.request.impl.AbstractRequest;
+import shesh.tron.worker.request.Request;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.rmi.Naming;
+import java.rmi.Remote;
 
 public final class APIUtils {
 
-    private static final String API_URL = "http://tronstadium.ciliste.games/api";
-
-    private static final String AUTH_URL = API_URL + "/auth";
-
-    private static final String REGISTER_URL = AUTH_URL + "/register.php";
-    private static final String LOGIN_URL = AUTH_URL + "/login.php";
-    private static final String VALIDATE_TOKEN_URL = AUTH_URL + "/isValidToken.php";
-
-    private static final String PROFILE_URL = API_URL + "/profile";
-
-    private static final String INFO_PROFILE_URL = PROFILE_URL + "/info.php";
-
-    private static final String INFO_API_URL = API_URL + "/info";
-
-    private static final String SERVER_INFO_URL = INFO_API_URL + "/server.php";
+    private static final String API_URL = "localhost";
+    private static final String AUTH_MANAGER_URL = "rmi://" + API_URL + "/authManager";
 
     private APIUtils() {
 
     }
 
-    public static POSTRequest register(String username, String password) {
+    public static Request<Token> register(String username, String password) {
 
-        return new POSTRequest(REGISTER_URL, "username=" + username + "&password=" + password);
+        return new AbstractRequest<>() {
+
+            @Override
+            public void execute() {
+
+                try {
+
+                    Remote r = Naming.lookup(AUTH_MANAGER_URL);
+
+                    if (r instanceof AuthManager) {
+
+                        AuthManager authManager = (AuthManager) r;
+                        EncryptedToken token = authManager.register(null, null);
+
+                        callThen(null);
+                    }
+                    else {
+
+                        callError(new RuntimeException(AUTH_MANAGER_URL + " is not an instance of AuthManager"));
+                    }
+                }
+                catch (Exception e) {
+
+                    callError(e);
+                }
+            }
+        };
     }
 
-    public static GETRequest login(String username, String password) {
+    public static Request<Token> login(String username, String password) {
 
-        return new GETRequest(LOGIN_URL + "?username=" + username + "&password=" + password);
+        return new AbstractRequest<>() {
+            @Override
+            public void execute() {
+
+                try {
+
+                    Remote r = Naming.lookup(AUTH_MANAGER_URL);
+
+                    if (r instanceof AuthManager) {
+
+                        AuthManager authManager = (AuthManager) r;
+                        EncryptedToken token = authManager.login(null, null);
+
+                        callThen(null);
+                    }
+                    else {
+
+                        callError(new RuntimeException(AUTH_MANAGER_URL + " is not an instance of AuthManager"));
+                    }
+                }
+                catch (Exception e) {
+
+                    callError(e);
+                }
+            }
+        };
     }
 
-    public static GETRequest getUserInfo(String token) {
+    public static Request<User> getUserInfo(String token) {
 
-        return new GETRequest(INFO_PROFILE_URL + "?token=" + token);
+        return new AbstractRequest<>() {
+
+            @Override
+            public void execute() {
+
+                try {
+
+                    Remote r = Naming.lookup(AUTH_MANAGER_URL);
+
+                    if (r instanceof AuthManager) {
+
+                        AuthManager authManager = (AuthManager) r;
+                        User user = authManager.getUser(null, null);
+
+                        callThen(user);
+                    }
+                    else {
+
+                        callError(new RuntimeException(AUTH_MANAGER_URL + " is not an instance of AuthManager"));
+                    }
+                }
+                catch (Exception e) {
+
+                    callError(e);
+                }
+            }
+        };
     }
 
-    public static GETRequest getServerInfo() {
+    public static Request<String> getServerInfo() {
 
-        return new GETRequest(SERVER_INFO_URL);
+        return null;
     }
 
-    public static boolean isValidToken(String token) throws Exception {
+    public static Request<Boolean> isValidToken(String token) {
 
-        URL url = new URL(VALIDATE_TOKEN_URL + "?token=" + token);
-        // Open a connection to the URL
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        return new AbstractRequest<>() {
+            @Override
+            public void execute() {
 
-        // Enable input/output streams
-        connection.setDoOutput(true);
+                try {
 
-        // Read the response from the server
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    Remote r = Naming.lookup(AUTH_MANAGER_URL);
 
-            StringBuilder response = new StringBuilder();
-            String line;
+                    if (r instanceof AuthManager) {
 
-            while ((line = reader.readLine()) != null) {
+                        AuthManager authManager = (AuthManager) r;
+                        boolean isValid = authManager.isValidToken(null, null);
 
-                response.append(line);
+                        callThen(isValid);
+                    }
+                    else {
+
+                        callError(new RuntimeException(AUTH_MANAGER_URL + " is not an instance of AuthManager"));
+                    }
+                }
+                catch (Exception e) {
+
+                    callError(e);
+                }
+            }
+        };
+    }
+
+    public static String formEncryptedData(String id, String data, SecretKey key) {
+
+        return id + "/" + new String(AesCipher.encrypt(data, key));
+    }
+
+    public static Couple<String, String> parseEncryptedData(String encryptedData) {
+
+        String id = encryptedData.substring(0, encryptedData.indexOf("/"));
+        String data = encryptedData.substring(encryptedData.indexOf("/") + 1);
+
+        return new Couple<>() {
+            @Override
+            public String getFirst() {
+
+                return id;
             }
 
-            // Close the connection
-            connection.disconnect();
+            @Override
+            public String getSecond() {
 
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(response.toString());
+                return data;
+            }
 
-            return jsonNode.get("valid").asBoolean();
-        }
+            @Override
+            public void setFirst(String first) {
+
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void setSecond(String second) {
+
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 }
