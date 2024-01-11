@@ -2,14 +2,13 @@ package shesh.tron.screen.auth;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import shesh.tron.screen.AbstractScreen;
-import shesh.tron.screen.Navigation;
+import shesh.tron.screen.context.ApiEndpointContext;
+import shesh.tron.screen.navigation.Navigation;
 import shesh.tron.utils.APIUtils;
 
 public class RegisterScreen extends AbstractScreen {
@@ -22,9 +21,12 @@ public class RegisterScreen extends AbstractScreen {
     private VisTextButton loginButton;
     private VisTextButton backButton;
 
-    public RegisterScreen(Navigation navigation) {
+    private final ApiEndpointContext apiEndpointContext;
+
+    public RegisterScreen(Navigation navigation, ApiEndpointContext apiEndpointContext) {
 
         super(navigation);
+        this.apiEndpointContext = apiEndpointContext;
     }
 
     protected void initUI() {
@@ -93,24 +95,16 @@ public class RegisterScreen extends AbstractScreen {
                 }
                 else {
 
-                    APIUtils.register(username, password).then(response -> {
+                    apiEndpointContext.getApiEndpoint().register(username, password).then(token -> {
 
-                        try {
+                        if (null != token) {
 
-                            ObjectMapper mapper = new ObjectMapper();
-                            JsonNode jsonNode = mapper.readTree(response.getRawResponse());
-
-                            String token = jsonNode.get("token").asText();
-
-                            navigation.showMenuScreen(token);
+                            navigation.showMenuScreen(token.getToken());
                         }
-                        catch (Exception e) {
+                        else {
 
-                            handleException(e);
+                            Dialogs.showErrorDialog(uiStage, "Could not register.");
                         }
-                    }).catchError(error -> {
-
-                        handleException(error);
 
                     }).executeAsync();
                 }
