@@ -3,11 +3,10 @@ package shesh.tron.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
+import shesh.tron.screen.navigation.Navigation;
 
 public abstract class AbstractScreen extends ScreenAdapter {
 
@@ -56,7 +55,7 @@ public abstract class AbstractScreen extends ScreenAdapter {
         uiStage.dispose();
     }
 
-    protected void handleException(Exception e) {
+    protected void handleException(Throwable e) {
 
         e.printStackTrace();
         Dialogs.showDetailsDialog(uiStage, "Something went wrong...", "Error", e.getMessage());
