@@ -2,15 +2,15 @@ package shesh.tron.screen.auth;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import shesh.tron.screen.AbstractScreen;
-import shesh.tron.screen.Navigation;
+import shesh.tron.screen.context.ApiEndpointContext;
+import shesh.tron.screen.navigation.Navigation;
 import shesh.tron.utils.APIUtils;
+import shesh.tron.utils.logger.LoggerFactory;
 
 public class LoginScreen extends AbstractScreen {
 
@@ -21,9 +21,12 @@ public class LoginScreen extends AbstractScreen {
     private VisTextButton registerButton;
     private VisTextButton backButton;
 
-    public LoginScreen(Navigation navigation) {
+    private final ApiEndpointContext apiEndpointContext;
+
+    public LoginScreen(Navigation navigation, ApiEndpointContext apiEndpointContext) {
 
         super(navigation);
+        this.apiEndpointContext = apiEndpointContext;
     }
 
     @Override
@@ -80,25 +83,17 @@ public class LoginScreen extends AbstractScreen {
                 String username = usernameField.getText();
                 String password = passwordField.getText();
 
-                APIUtils.login(username, password).then(response -> {
+                apiEndpointContext.getApiEndpoint().login(username, password).then(token -> {
 
-                    try {
+                    if (null != token) {
 
-                        ObjectMapper mapper = new ObjectMapper();
-                        JsonNode jsonNode = mapper.readTree(response.getRawResponse());
-
-                        String token = jsonNode.get("token").asText();
-
-                        navigation.showMenuScreen(token);
+                        LoggerFactory.getLogger().info("Login successful, showing menu screen");
+                        navigation.showMenuScreen(token.getToken());
                     }
-                    catch (Exception e) {
+                    else {
 
-                        handleException(e);
+                        Dialogs.showErrorDialog(uiStage, "Login failed", "Username or password is incorrect");
                     }
-
-                }).catchError(error -> {
-
-                    handleException(error);
 
                 }).executeAsync();
             }
